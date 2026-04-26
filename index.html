@@ -382,9 +382,6 @@ svg{display:block}
       <div class="sb-item" onclick="nav('contentplan',this)">
         <svg viewBox="0 0 24 24"><use href="#i-cal"/></svg>Content Plan
       </div>
-      <div class="sb-item" onclick="nav('pillars',this)">
-        <svg viewBox="0 0 24 24"><use href="#i-layers"/></svg>Pillars
-      </div>
 
       <div class="sb-section-label" style="margin-top:4px">Clients</div>
       <div class="sb-item" onclick="nav('clients',this)">
@@ -477,9 +474,21 @@ svg{display:block}
             <div id="f-ch"><div class="empty-state"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg><p>No changes requested</p></div></div>
           </div>
         </div>
-      </div>
 
-      <!-- TASKS -->
+        <!-- PILLARS ON DASHBOARD -->
+        <div class="card" style="margin-top:20px">
+          <div class="card-header">
+            <svg style="width:14px;height:14px;stroke:var(--pink);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><use href="#i-layers"/></svg>
+            <span class="card-title" style="color:var(--pink)">Content Pillars</span>
+            <select class="sel" id="dash-pi-cl" onchange="loadDashPillars()" style="margin-left:auto;font-size:11px;padding:4px 8px">
+              <option value="">All Clients</option>
+            </select>
+          </div>
+          <div id="dash-pillars-wrap">
+            <div class="loading-row" style="padding:20px"><div class="spin"></div>Loading pillars…</div>
+          </div>
+        </div>
+      </div>
       <div class="page" id="page-tasks"><div id="tasks-wrap"><div class="loading-row"><div class="spin"></div>Loading tasks…</div></div></div>
 
       <!-- PIPELINE -->
@@ -714,12 +723,13 @@ async function loadAll(){
       SB.from('content_plans').select('*').order('scheduled_date'),
     ]);
     clients=cr.data||[]; tasks=tr.data||[]; content=sr.data||[]; cp=cpr.data||[];
-    ['pl-cl','cp-cl','pi-cl'].forEach(id=>{
+    ['pl-cl','cp-cl','pi-cl','dash-pi-cl'].forEach(id=>{
       const s=document.getElementById(id);
       while(s.options.length>1)s.remove(1);
       clients.forEach(c=>{const o=new Option(c.name,c.id);s.add(o)});
     });
     renderToday();
+    loadDashPillars();
   } catch(e){toast('Failed to load data','error')}
 }
 
@@ -958,8 +968,20 @@ async function loadCP(){
   }catch(e){tb.innerHTML='<tr><td colspan="5" style="color:var(--red);padding:16px;text-align:center">Failed to load</td></tr>'}
 }
 
-// PILLARS
-async function loadPillars(){
+// PILLARS (dashboard)
+async function loadDashPillars(){
+  const cf=document.getElementById('dash-pi-cl').value;
+  const w=document.getElementById('dash-pillars-wrap');
+  w.innerHTML='<div class="loading-row" style="padding:16px"><div class="spin"></div></div>';
+  try{
+    let q=SB.from('pillars').select('*').order('created_at');
+    if(cf)q=q.eq('client_id',cf);
+    const{data,error}=await q;if(error)throw error;
+    const rows=data||[];
+    if(!rows.length){w.innerHTML='<div class="empty-state" style="padding:20px"><p>No pillars found</p></div>';return}
+    w.innerHTML=`<div class="pillars-grid">${rows.map((p,i)=>pillarHtml(p,i)).join('')}</div>`;
+  }catch(e){w.innerHTML='<div class="empty-state" style="padding:16px;color:var(--text2)"><p>No pillars table found yet</p></div>'}
+}
   const cf=document.getElementById('pi-cl').value,w=document.getElementById('pi-wrap');
   w.innerHTML='<div class="loading-row"><div class="spin"></div>Loading pillars…</div>';
   try{
