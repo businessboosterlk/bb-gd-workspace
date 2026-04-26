@@ -44,11 +44,11 @@ svg{display:block}
 
 /* ── LOGIN ── */
 #login-screen{position:fixed;inset:0;z-index:9999;background:#0B0C0F;display:flex;align-items:center;justify-content:center}
-.login-card{text-align:center;width:100%;max-width:400px;padding:0 20px}
+.login-card{background:#111318;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:40px 40px 36px;width:100%;max-width:380px;text-align:center}
 .login-logo{width:200px;height:auto;display:block;margin:0 auto 10px}
-.login-ws-label{font-size:11px;color:var(--pink);letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:4px;margin-top:12px}
-.login-date-label{font-size:13px;color:var(--text2);margin-bottom:20px;font-weight:400}
-.login-field{width:100%;background:#181B22;border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px;color:var(--text);font-size:14px;font-family:'Poppins',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s;text-align:center;letter-spacing:.04em}
+.login-ws-label{font-size:11px;color:var(--pink);letter-spacing:.16em;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.login-date-label{font-size:13px;color:var(--text2);margin-bottom:28px;font-weight:400}
+.login-field{width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px;color:var(--text);font-size:14px;font-family:'Poppins',sans-serif;outline:none;margin-bottom:10px;transition:border-color .2s;text-align:center;letter-spacing:.04em}
 .login-field:focus{border-color:var(--pink)}
 .login-field::placeholder{color:rgba(255,255,255,.18)}
 .login-enter{width:100%;background:var(--pink);color:#fff;border:none;border-radius:10px;padding:15px;font-size:14px;font-weight:700;font-family:'Poppins',sans-serif;cursor:pointer;margin-top:2px;transition:all .15s;letter-spacing:.1em}
@@ -347,12 +347,10 @@ svg{display:block}
       onerror="this.style.display='none'">
     <div class="login-ws-label">GD Workspace</div>
     <div class="login-date-label" id="login-date">--</div>
-    <div style="background:#111318;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:24px 24px 24px;margin-top:4px">
-      <input class="login-field" id="login-name" placeholder="YOUR NAME" autocomplete="off" spellcheck="false">
-      <input class="login-field" id="login-pin" type="password" placeholder="PIN" maxlength="4" autocomplete="off">
-      <button class="login-enter" onclick="tryLogin()">ENTER</button>
-      <div class="login-err" id="login-err"></div>
-    </div>
+    <input class="login-field" id="login-name" placeholder="YOUR NAME" autocomplete="off" spellcheck="false">
+    <input class="login-field" id="login-pin" type="password" placeholder="PIN" maxlength="4" autocomplete="off">
+    <button class="login-enter" onclick="tryLogin()">ENTER</button>
+    <div class="login-err" id="login-err"></div>
   </div>
 </div>
 
